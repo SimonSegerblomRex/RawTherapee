@@ -3133,7 +3133,7 @@ TP_LOCALLAB_TLABEL_TOOLTIP;Transmission map result.\nMin and Max are used by Var
 TP_LOCALLAB_TM;Tone Mapping
 TP_LOCALLAB_TM_MASK;Use transmission map
 TP_LOCALLAB_TONEMAPESTOP_TOOLTIP;This slider affects edge sensitivity.\n The greater the value, the more likely a change in contrast will be interpreted as an "edge".\n If set to zero the tone mapping will have an effect similar to unsharp masking.
-TP_LOCALLAB_TONEMAPGAM_TOOLTIP;The Gamma slider shifts the tone-mapping effect towards either the shadows or the highlights.
+TP_LOCALLAB_TONEMAPGAM_TOOLTIP;Apply a gamma on Luminance L*a*b* datas before and after treatment Tone Mapping
 TP_LOCALLAB_TONEMAPREWEI_TOOLTIP;In some cases tone mapping may result in a cartoonish appearance, and in some rare cases soft but wide halos may appear.\n Increasing the number of reweighting iterates will help fight some of these problems.
 TP_LOCALLAB_TONEMAP_TOOLTIP;Same as the tone mapping tool in the main menu.\nThe main-menu tool must be deactivated if this tool is used.
 TP_LOCALLAB_TONEMASCALE_TOOLTIP;This slider allows you to adjust  the transition between "local" and "global" contrast.\nThe greater the value, the larger a detail needs to be for it to be boosted

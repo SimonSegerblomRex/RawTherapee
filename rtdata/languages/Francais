@@ -1966,6 +1966,9 @@ TP_LOCALLAB_FFTWBLUR;ƒ - Utilise toujours Fast Fourier Transform
 TP_LOCALLAB_FULLIMAGE;Calcule les valeurs Noir Ev - Blanc Ev - sur l'image entière
 TP_LOCALLAB_FULLIMAGELOG_TOOLTIP;Calcule les valeurs Ev sur l'image entière.
 TP_LOCALLAB_GAM;Gamma
+TP_LOCALLAB_GAMCOL_TOOLTIP;Applique un gamma sur les données Luminance L*a*b*
+TP_LOCALLAB_GAMC_TOOLTIP;Applique un gamma sur les données Luminance L*a*b* avant et après le traitement Pyramide 1 et Pyramide 2
+TP_LOCALLAB_GAMW;Gamma (ondelettes pyramides)
 TP_LOCALLAB_GAMFRA;Courbe Réponse Tonale (TRC)
 TP_LOCALLAB_GAMM;Gamma
 TP_LOCALLAB_GAMMASKCOL;Gamma
@@ -2394,7 +2397,7 @@ TP_LOCALLAB_TLABEL_TOOLTIP;Transmission map result.\nMin and Max are used by Var
 TP_LOCALLAB_TM;Compression tonale - Texture
 TP_LOCALLAB_TM_MASK;Utilise transmission map
 TP_LOCALLAB_TONEMAPESTOP_TOOLTIP;Ce paramètre affecte la sensibilité aux bords.\n Plus grand il est, plus la luminosité change peut être considéré comme un bord.\n Si réglé à zéro 'compression tonale' va avoir un effet similaire à masque flou.
-TP_LOCALLAB_TONEMAPGAM_TOOLTIP;Gamma déplace l'action de 'compression tonale' des ombres vers les lumières.
+TP_LOCALLAB_TONEMAPGAM_TOOLTIP;Applique un gamma sur les données Luminance L*a*b* avant et après le traitement Compression tonale - texture
 TP_LOCALLAB_TONEMAPREWEI_TOOLTIP;Dans certains 'compression tonal' peut amener des effets de perspective, et dans de rares cas des halos peuvent apparaître.\n Accroître le nombre d'itérations peut aider à résoudre ces problèmes.
 TP_LOCALLAB_TONEMAP_TOOLTIP;Compression tonal - menu principal doit être désactivé
 TP_LOCALLAB_TONEMASCALE_TOOLTIP;Ce contrôle donne le pouvoir de différencier le contraste "local" et "global".\nPlus il est important, plus un détail sera accentué.

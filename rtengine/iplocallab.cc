@@ -13010,7 +13010,48 @@ void ImProcFunctions::Lab_Local(
 
                 if (lp.showmasktmmet == 0 || lp.showmasktmmet == 1  || lp.showmasktmmet == 2 || lp.showmasktmmet == 4 || lp.showmasktmmet == 3 || lp.enatmMask) {
                     constexpr int itera = 0;
+                    float gamma = (float)params->locallab.spots.at(sp).gamma;
+                    rtengine::GammaValues g_a; //gamma parameters
+                    double pwr = 1.0 / gamma;//default 3.0 - gamma Lab
+                    double ts = 9.03296;//always the same 'slope' in the extrem shadows - slope Lab
+                    rtengine::Color::calcGamma(pwr, ts, g_a); // call to calcGamma with selected gamma and slope
+                    
+                    if(gamma != 1.f) {
+#ifdef _OPENMP
+#   pragma omp parallel for schedule(dynamic,16) if (multiThread)
+#endif
+                        for (int y = 0; y < bufgb->H; ++y) {
+                        int x = 0;
+#ifdef __SSE2__
+                            for (; x < bufgb->W - 3; x += 4) {
+                            STVFU(bufgb->L[y][x], F2V(32768.f) * igammalog(LVFU(bufgb->L[y][x]) / F2V(32768.f), F2V(gamma), F2V(ts), F2V(g_a[2]), F2V(g_a[4])));
+                            }
+#endif
+                            for (;x < tmp1->W; ++x) {
+                                bufgb->L[y][x] = 32768.f * igammalog(bufgb->L[y][x] / 32768.f, gamma, ts, g_a[2], g_a[4]);
+                            }
+                        }
+                    }
+
                     ImProcFunctions::EPDToneMaplocal(sp, bufgb.get(), tmp1.get(), itera, sk);//iterate to 0 calculate with edgstopping, improve result, call=1 dcrop we can put iterate to 5
+
+                    if(gamma != 1.f) {
+#ifdef _OPENMP
+#   pragma omp parallel for schedule(dynamic,16) if (multiThread)
+#endif
+                        for (int y = 0; y < tmp1->H; ++y) {//apply inverse gamma 3.f and put result in range 32768.f
+                            int x = 0;
+#ifdef __SSE2__
+                            for (; x < tmp1->W - 3; x += 4) {
+                                STVFU(tmp1->L[y][x], F2V(32768.f) * gammalog(LVFU(tmp1->L[y][x]) / F2V(32768.f), F2V(gamma), F2V(ts), F2V(g_a[3]), F2V(g_a[4])));
+                            }
+#endif
+                            for (; x < tmp1->W; ++x) {
+                                tmp1->L[y][x] = 32768.f * gammalog(tmp1->L[y][x] / 32768.f, gamma, ts, g_a[3], g_a[4]);
+                            }
+                        }
+                    }
+
 
                     tmp1m->CopyFrom(tmp1.get(), multiThread); //save current result
                     bool enatmMasktmap = params->locallab.spots.at(sp).enatmMaskaft;

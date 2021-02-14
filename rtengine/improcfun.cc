@@ -5169,7 +5169,7 @@ void ImProcFunctions::EPDToneMaplocal(int sp, LabImage *lab, LabImage *tmp1, uns
     const float edgest = std::min(params->locallab.spots.at(sp).estop, params->localContrast.enabled ? 3.0 : 4.0);
     
     float sca  = ((float)params->locallab.spots.at(sp).scaltm);
-    float gamm = ((float)params->locallab.spots.at(sp).gamma);
+    float gamm = 1.f;//((float)params->locallab.spots.at(sp).gamma);
     float satur = ((float)params->locallab.spots.at(sp).satur) / 100.f;
     float rew = ((float)params->locallab.spots.at(sp).rewei);
     //Pointers to whole data and size of it.
