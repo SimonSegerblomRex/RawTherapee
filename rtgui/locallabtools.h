@@ -170,7 +170,7 @@ private:
 
 /* ==== LocallabColor ==== */
 class LocallabColor:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool,
     public ThresholdAdjusterListener
 {
@@ -322,7 +322,7 @@ private:
 
 /* ==== LocallabExposure ==== */
 class LocallabExposure:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool
 {
 private:
@@ -435,7 +435,7 @@ private:
 
 /* ==== LocallabShadow ==== */
 class LocallabShadow:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool
 {
 private:
@@ -526,7 +526,7 @@ private:
 
 /* ==== LocallabVibrance ==== */
 class LocallabVibrance:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool,
     public ThresholdAdjusterListener,
     public ThresholdCurveProvider
@@ -618,13 +618,13 @@ private:
 
 /* ==== LocallabSoft ==== */
 class LocallabSoft:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool
 {
 private:
     // Soft light specific widgets
     MyComboBoxText* const softMethod;
-    Gtk::HBox* const ctboxsoftmethod;
+    Gtk::Box* const ctboxsoftmethod;
     MyComboBoxText* const showmasksoftMethod;
     Adjuster* const streng;
     Adjuster* const laplace;
@@ -664,7 +664,7 @@ private:
 
 /* ==== LocallabBlur ==== */
 class LocallabBlur:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool,
     public ThresholdAdjusterListener
 //    public ThresholdCurveProvider
@@ -768,7 +768,7 @@ private:
     DiagonalCurveEditor* const Lmaskblshape;
     CurveEditorGroup* const mask2blCurveEditorGwav;
     FlatCurveEditor* const LLmaskblshapewav;
-    Gtk::HBox* const quaHBox;
+    Gtk::Box* const quaHBox;
     ThresholdAdjuster* const csThresholdblur;
 
     sigc::connection blMethodConn, fftwblConn, invblConn, medMethodConn, blurMethodConn, chroMethodConn, activlumConn, showmaskblMethodConn, showmaskblMethodtypConn, enablMaskConn, toolblConn;
@@ -828,7 +828,7 @@ private:
 
 /* ==== LocallabTone ==== */
 class LocallabTone:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool
 {
 private:
@@ -904,7 +904,7 @@ private:
 
 /* ==== LocallabRetinex ==== */
 class LocallabRetinex:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool
 {
 private:
@@ -1011,7 +1011,7 @@ private:
 
 /* ==== LocallabSharp ==== */
 class LocallabSharp:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool
 {
 private:
@@ -1056,7 +1056,7 @@ private:
 
 /* ==== LocallabContrast ==== */
 class LocallabContrast:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool,
     public ThresholdAdjusterListener
 
@@ -1214,7 +1214,7 @@ private:
 
 /* ==== LocallabCBDL ==== */
 class LocallabCBDL:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool
 {
 private:
@@ -1294,7 +1294,7 @@ private:
 
 /* ==== LocallabLog ==== */
 class LocallabLog:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool
 {
 private:
@@ -1310,7 +1310,7 @@ private:
     Adjuster* const sourceGray;
     Adjuster* const sourceabs;
     MyComboBoxText*  const sursour;
-    Gtk::HBox* const surHBox;
+    Gtk::Box* const surHBox;
     Gtk::Frame* const log1Frame;
     Gtk::Frame* const log2Frame;
     Adjuster* const targetGray;
@@ -1327,7 +1327,7 @@ private:
     DiagonalCurveEditor* const LshapeL;
     Adjuster* const targabs;
     MyComboBoxText*  const surround;
-    Gtk::HBox* const surrHBox;
+    Gtk::Box* const surrHBox;
     
     Adjuster* const baselog;
     MyExpander* const exprecovl;
@@ -1403,7 +1403,7 @@ private:
 
 /* ==== LocallabMask ==== */
 class LocallabMask:
-    public Gtk::VBox,
+    public Gtk::Box,
     public LocallabTool,
     public ThresholdAdjusterListener
 {
