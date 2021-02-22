@@ -9010,7 +9010,7 @@ void ImProcFunctions::DeNoise(int call, float * slidL, float * slida, float * sl
 
             float gamma = lp.noisegam;
             rtengine::GammaValues g_a; //gamma parameters
-            double pwr = 1.0 / lp.noisegam;//default 3.0 - gamma Lab
+            double pwr = 1.0 / (double) lp.noisegam;//default 3.0 - gamma Lab
             double ts = 9.03296;//always the same 'slope' in the extrem shadows - slope Lab
             rtengine::Color::calcGamma(pwr, ts, g_a); // call to calcGamma with selected gamma and slope
 
@@ -9722,7 +9722,7 @@ void ImProcFunctions::DeNoise(int call, float * slidL, float * slida, float * sl
                     }
                 float gamma = lp.noisegam;
                 rtengine::GammaValues g_a; //gamma parameters
-                double pwr = 1.0 / lp.noisegam;//default 3.0 - gamma Lab
+                double pwr = 1.0 / (double) lp.noisegam;//default 3.0 - gamma Lab
                 double ts = 9.03296;//always the same 'slope' in the extrem shadows - slope Lab
                 rtengine::Color::calcGamma(pwr, ts, g_a); // call to calcGamma with selected gamma and slope
                 if(gamma > 1.f) {
@@ -12813,7 +12813,7 @@ void ImProcFunctions::Lab_Local(
                     constexpr int itera = 0;
                     float gamma = (float)params->locallab.spots.at(sp).gamma;
                     rtengine::GammaValues g_a; //gamma parameters
-                    double pwr = 1.0 / gamma;//default 3.0 - gamma Lab
+                    double pwr = 1.0 / (double) gamma;//default 3.0 - gamma Lab
                     double ts = 9.03296;//always the same 'slope' in the extrem shadows - slope Lab
                     rtengine::Color::calcGamma(pwr, ts, g_a); // call to calcGamma with selected gamma and slope
                     
@@ -13602,7 +13602,7 @@ void ImProcFunctions::Lab_Local(
 
                     float gamma = lp.gamlc;
                     rtengine::GammaValues g_a; //gamma parameters
-                    double pwr = 1.0 / lp.gamlc;//default 3.0 - gamma Lab
+                    double pwr = 1.0 / (double) lp.gamlc;//default 3.0 - gamma Lab
                     double ts = 9.03296;//always the same 'slope' in the extrem shadows - slope Lab
                     rtengine::Color::calcGamma(pwr, ts, g_a); // call to calcGamma with selected gamma and slope
 
@@ -14937,7 +14937,7 @@ void ImProcFunctions::Lab_Local(
                     }
                         float gamma = lp.gamex;
                         rtengine::GammaValues g_a; //gamma parameters
-                        double pwr = 1.0 / lp.gamex;//default 3.0 - gamma Lab
+                        double pwr = 1.0 / (double) lp.gamex;//default 3.0 - gamma Lab
                         double ts = 9.03296;//always the same 'slope' in the extrem shadows - slope Lab
                         rtengine::Color::calcGamma(pwr, ts, g_a); // call to calcGamma with selected gamma and slope
 
@@ -16105,7 +16105,7 @@ void ImProcFunctions::Lab_Local(
                         }
                         float gamma = lp.gamc;
                         rtengine::GammaValues g_a; //gamma parameters
-                        double pwr = 1.0 / lp.gamc;//default 3.0 - gamma Lab
+                        double pwr = 1.0 / (double) lp.gamc;//default 3.0 - gamma Lab
                         double ts = 9.03296;//always the same 'slope' in the extrem shadows - slope Lab
                         rtengine::Color::calcGamma(pwr, ts, g_a); // call to calcGamma with selected gamma and slope
 
