@@ -9000,6 +9000,9 @@ void ImProcFunctions::DeNoise(bool &isnois, int call, float * slidL, float * sli
             if(levred < 7) {//If windows preview or detail window too small exit to avoid artifacts
               //  return;
                 isnois = false;
+                if(lp.quamet == 2) {
+                    isnois = true;
+                }
             }
 
         if (call == 1 && GW >= mDEN && GH >= mDEN  && isnois) {
