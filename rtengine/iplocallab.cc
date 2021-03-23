@@ -8998,27 +8998,13 @@ void ImProcFunctions::DeNoise(bool &isnois, int call, float * slidL, float * sli
 
             levred = rtengine::min(levred, maxlevelspot);
             if(levred < 7) {//If windows preview or detail window too small exit to avoid artifacts
-              //  return;
                 isnois = false;
                 if(lp.quamet == 2) {
                     isnois = true;
                 }
             }
 
-        if (call == 1 && GW >= mDEN && GH >= mDEN  && isnois) {
-
-            int minwin = rtengine::min(GW, GH);
-            int maxlevelspot = 10;//maximum possible
-
-            // adap maximum level wavelet to size of crop
-            while ((1 << maxlevelspot) >= (minwin * sk) && maxlevelspot  > 1) {
-                --maxlevelspot ;
-            }
-
-            levred = rtengine::min(levred, maxlevelspot);
-            if(levred < 7) {//If windows preview or detail window too small exit to avoid artifacts
-                return;
-            }
+        if (call == 1 && ((GW >= mDEN && GH >= mDEN  && isnois) || lp.quamet == 2)) {
 
             LabImage tmp1(transformed->W, transformed->H);
             LabImage tmp2(transformed->W, transformed->H);
