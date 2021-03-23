@@ -1034,6 +1034,7 @@ void ImProcCoordinator::updatePreviewImage(int todo, bool panningRelatedChange)
                 float Tmin;
                 float Tmax;
                 int lastsav;
+                bool isnois = true;
                 ipf.Lab_Local(3, sp, (float**)shbuffer, nprevl, nprevl, reserv.get(), lastorigimp.get(), 0, 0, pW, pH, scale, locRETgainCurve, locRETtransCurve,
                               lllocalcurve, locallutili,
                               cllocalcurve, localclutili,
@@ -1076,7 +1077,7 @@ void ImProcCoordinator::updatePreviewImage(int todo, bool panningRelatedChange)
                               loclmasCurve_wav, lmasutili_wav,
                               LHutili, HHutili, CHutili, cclocalcurve, localcutili, rgblocalcurve, localrgbutili, localexutili, exlocalcurve, hltonecurveloc, shtonecurveloc, tonecurveloc, lightCurveloc,
                               huerblu, chromarblu, lumarblu, huer, chromar, lumar, sobeler, lastsav, false, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                              minCD, maxCD, mini, maxi, Tmean, Tsigma, Tmin, Tmax);
+                              minCD, maxCD, mini, maxi, Tmean, Tsigma, Tmin, Tmax, isnois);
 
                 if (sp + 1u < params->locallab.spots.size()) {
                     // do not copy for last spot as it is not needed anymore

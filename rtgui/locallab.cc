@@ -1042,6 +1042,11 @@ void Locallab::logencodChanged(const float blackev, const float whiteev, const f
     explog->updateAutocompute(blackev, whiteev, sourceg, sourceab, targetg);
 }
 
+void Locallab::levChanged(double nlevel)
+{
+    expblur->updatelev(nlevel);
+}
+
 void Locallab::refChanged(const std::vector<locallabRef> &ref, int selspot)
 {
     // Saving transmitted mask background data

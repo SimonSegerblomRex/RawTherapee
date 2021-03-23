@@ -2768,6 +2768,8 @@ TP_LOCALLAB_LEVFRA;Levels
 TP_LOCALLAB_LIGHTNESS;Lightness
 TP_LOCALLAB_LIGHTN_TOOLTIP;In inverse mode: selection = -100 forces luminance to zero
 TP_LOCALLAB_LIGHTRETI;Lightness
+TP_LOCALLAB_LEVLABEL;Wavelet - Sufficient size of the preview
+TP_LOCALLAB_LEVLABELNO;Wavelet - Insufficient size of the preview
 TP_LOCALLAB_LINEAR;Linearity
 TP_LOCALLAB_LIST_NAME;Add tool to current spot...
 TP_LOCALLAB_LIST_TOOLTIP;You can select 3 levels of complexity for each tool: Basic, Standard and Advanced.\nThe default setting for all tools is Basic but this can be changed in the Preferences window.\nYou can also change the level of complexity on a per-tool basis while you are editing

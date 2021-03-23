@@ -142,6 +142,7 @@ public:
 
     // Locallab Log Encoding autocompute function
     void logencodChanged(const float blackev, const float whiteev, const float sourceg, const float sourceab, const float targetg) override;
+    void levChanged(double nlevel) override;
 
     // Locallab tools mask background management function
     void refChanged(const std::vector<locallabRef> &ref, int selspot) override;

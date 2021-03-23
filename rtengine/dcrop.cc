@@ -997,6 +997,7 @@ void Crop::update(int todo)
             float Tmin;
             float Tmax;
             int lastsav;
+            bool isnois = true;
             CurveFactory::complexCurvelocal(ecomp, black / 65535., hlcompr, hlcomprthresh, shcompr, br, cont, lumare,
                                             hltonecurveloc2, shtonecurveloc2, tonecurveloc2, lightCurveloc2, avge,
                                             skip);
@@ -1045,7 +1046,7 @@ void Crop::update(int todo)
                         LHutili, HHutili, CHutili, cclocalcurve2, localcutili, rgblocalcurve2, localrgbutili, localexutili, exlocalcurve2, hltonecurveloc2, shtonecurveloc2, tonecurveloc2, lightCurveloc2,
                         huerefblu, chromarefblu, lumarefblu, huere, chromare, lumare, sobelre, lastsav, 
                         parent->previewDeltaE, parent->locallColorMask, parent->locallColorMaskinv, parent->locallExpMask, parent->locallExpMaskinv, parent->locallSHMask, parent->locallSHMaskinv, parent->locallvibMask,  parent->localllcMask, parent->locallsharMask, parent->locallcbMask, parent->locallretiMask, parent->locallsoftMask, parent->localltmMask, parent->locallblMask,
-                        parent->localllogMask, parent->locall_Mask, minCD, maxCD, mini, maxi, Tmean, Tsigma, Tmin, Tmax);
+                        parent->localllogMask, parent->locall_Mask, minCD, maxCD, mini, maxi, Tmean, Tsigma, Tmin, Tmax, isnois);
                         if(parent->previewDeltaE || parent->locallColorMask == 5 || parent->locallvibMask == 4 || parent->locallExpMask == 5 || parent->locallSHMask == 4 || parent->localllcMask == 4 || parent->localltmMask == 4 || parent->localllogMask == 4 || parent->locallsoftMask == 6 || parent->localllcMask == 4) {  
                             params.blackwhite.enabled = false;
                             params.colorToning.enabled = false;
@@ -1113,12 +1114,17 @@ void Crop::update(int todo)
                         loclmasCurve_wav,lmasutili_wav,
                         LHutili, HHutili, CHutili, cclocalcurve2, localcutili, rgblocalcurve2, localrgbutili, localexutili, exlocalcurve2, hltonecurveloc2, shtonecurveloc2, tonecurveloc2, lightCurveloc2,
                         huerefblu, chromarefblu, lumarefblu, huere, chromare, lumare, sobelre, lastsav, false, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        minCD, maxCD, mini, maxi, Tmean, Tsigma, Tmin, Tmax);
+                        minCD, maxCD, mini, maxi, Tmean, Tsigma, Tmin, Tmax, isnois);
             }
             if (sp + 1u < params.locallab.spots.size()) {
                 // do not copy for last spot as it is not needed anymore
                 lastorigCrop->CopyFrom(labnCrop);
             }
+                if (parent->locallListener) {
+                    float lez = 7;
+                    if(isnois == false) lez = 4;
+                    parent->locallListener->levChanged(lez);
+                }
 
             if (skip <= 2) {
                 Glib::usleep(settings->cropsleep);    //wait to avoid crash when crop 100% and move window

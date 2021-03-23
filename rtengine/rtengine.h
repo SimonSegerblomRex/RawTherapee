@@ -440,6 +440,8 @@ public:
     virtual void refChanged(const std::vector<locallabRef> &ref, int selspot) = 0;
     virtual void minmaxChanged(const std::vector<locallabRetiMinMax> &minmax, int selspot) = 0;
     virtual void logencodChanged(const float blackev, const float whiteev, const float sourceg, const float sourceab, const float targetg) = 0;
+    virtual void levChanged(double nlevel) = 0;
+
 };
 
 class AutoColorTonListener

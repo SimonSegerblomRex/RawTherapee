@@ -6248,6 +6248,7 @@ LocallabBlur::LocallabBlur():
     activlum(Gtk::manage(new Gtk::CheckButton(M("TP_LOCALLAB_ACTIV")))),
     expdenoise(Gtk::manage(new MyExpander(false, M("TP_LOCALLAB_DENOI_EXP")))),
     quamethod(Gtk::manage(new MyComboBoxText())),
+    levLabel(Gtk::manage(new Gtk::Label("---", Gtk::ALIGN_CENTER))),
     LocalcurveEditorwavden(new CurveEditorGroup(options.lastlocalCurvesDir, M("TP_LOCALLAB_WAVDEN"))),
     wavshapeden(static_cast<FlatCurveEditor*>(LocalcurveEditorwavden->addCurve(CT_Flat, "", nullptr, false, false))),
     expdenoise1(Gtk::manage(new MyExpander(false, M("TP_LOCALLAB_DENOI1_EXP")))),
@@ -6601,6 +6602,7 @@ LocallabBlur::LocallabBlur():
     Gtk::Frame* const wavFrame = Gtk::manage(new Gtk::Frame());
     ToolParamBlock* const wavBox = Gtk::manage(new ToolParamBlock());
     wavBox->pack_start(*quaHBox);
+    wavBox->pack_start(*levLabel);
     wavBox->pack_start(*LocalcurveEditorwavden, Gtk::PACK_SHRINK, 4); // Padding is mandatory to correct behavior of curve editor
     // wavBox->pack_start(*noiselumf0);
     // wavBox->pack_start(*noiselumf);
@@ -7995,6 +7997,36 @@ void LocallabBlur::updateGUIToMode(const modeType new_type)
             
     }
 }
+
+void LocallabBlur::updatelev(double nlevel)
+{
+    if (!batchMode) {
+        
+        idle_register.add(
+        [this, nlevel]() -> bool {
+            if(nlevel == 7){
+                levLabel->set_text(
+                    Glib::ustring::compose(
+                        M("TP_LOCALLAB_LEVLABEL"),
+                        Glib::ustring::format(std::fixed, std::setprecision(0), nlevel)
+                    )
+                );
+            } else {
+                levLabel->set_text(
+                    Glib::ustring::compose(
+                        M("TP_LOCALLAB_LEVLABELNO"),
+                        Glib::ustring::format(std::fixed, std::setprecision(0), nlevel)
+                    )
+                );
+            }
+            return false;
+        }
+        );
+        
+    }
+}
+
+
 
 void LocallabBlur::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer)
 {

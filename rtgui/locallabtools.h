@@ -696,6 +696,7 @@ private:
     Gtk::CheckButton* const activlum;
     MyExpander* const expdenoise;
     MyComboBoxText* const quamethod;
+    Gtk::Label* const levLabel;
     CurveEditorGroup* const LocalcurveEditorwavden;
     FlatCurveEditor* const wavshapeden;
     MyExpander* const expdenoise1;
@@ -796,6 +797,7 @@ public:
     void adjusterChanged(ThresholdAdjuster* a, int newBottomLeft, int newTopLeft, int newBottomRight, int newTopRight) override {}; // Not used
     void adjusterChanged2(ThresholdAdjuster* a, int newBottomL, int newTopL, int newBottomR, int newTopR) override;
     void curveChanged(CurveEditor* ce) override;
+    void updatelev(double nlevel);
 
 private:
     void enabledChanged() override;
