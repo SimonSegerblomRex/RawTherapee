@@ -688,7 +688,7 @@ void LocallabTone::updateGUIToMode(const modeType new_type)
     }
 }
 
-void LocallabTone::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer)
+void LocallabTone::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer, int typ)
 {
     idle_register.add(
     [this, normHuer, normLumar, normChromar]() -> bool {
@@ -1769,7 +1769,7 @@ void LocallabRetinex::updateGUIToMode(const modeType new_type)
     }
 }
 
-void LocallabRetinex::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer)
+void LocallabRetinex::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer, int typ)
 {
     idle_register.add(
     [this, normHuer, normLumar, normChromar]() -> bool {
@@ -3996,7 +3996,7 @@ void LocallabContrast::updateGUIToMode(const modeType new_type)
     }
 }
 
-void LocallabContrast::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer)
+void LocallabContrast::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer, int typ)
 {
     idle_register.add(
     [this, normHuer, normLumar, normChromar]() -> bool {
@@ -5015,7 +5015,7 @@ void LocallabCBDL::updateGUIToMode(const modeType new_type)
     }
 }
 
-void LocallabCBDL::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer)
+void LocallabCBDL::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer, int typ)
 {
     idle_register.add(
     [this, normHuer, normLumar, normChromar]() -> bool {
@@ -6307,7 +6307,7 @@ void LocallabLog::fullimageChanged()
     }
 }
 
-void LocallabLog::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer)
+void LocallabLog::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer, int typ)
 {
     idle_register.add(
     [this, normHuer, normLumar, normChromar]() -> bool {
@@ -7140,7 +7140,7 @@ void LocallabMask::updateGUIToMode(const modeType new_type)
     
 }
 
-void LocallabMask::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer)
+void LocallabMask::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer, int typ)
 {
     idle_register.add(
     [this, normHuer, normLumar, normChromar]() -> bool {

@@ -255,7 +255,7 @@ bool LocallabTool::isLocallabToolAdded()
     return exp->get_visible();
 }
 
-void LocallabTool::refChanged(const double huer, const double lumar, const double chromar)
+void LocallabTool::refChanged(const double huer, const double lumar, const double chromar, int typ)
 {
     // Hue reference normalization (between 0 and 1)
     double normHuer = huer;
@@ -275,7 +275,7 @@ void LocallabTool::refChanged(const double huer, const double lumar, const doubl
     const double normChromar = chromar / 137.4f;
 
     // Update mask curve backgrounds
-    updateMaskBackground(normChromar, normLumar, normHuer);
+    updateMaskBackground(normChromar, normLumar, normHuer, typ);
 }
 
 void LocallabTool::colorForValue(double valX, double valY, enum ColorCaller::ElemType elemType, int callerId, ColorCaller* caller)
@@ -2116,10 +2116,10 @@ void LocallabColor::updateGUIToMode(const modeType new_type)
     }
 }
 
-void LocallabColor::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer)
+void LocallabColor::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer, int typ)
 {
     idle_register.add(
-    [this, normHuer, normLumar, normChromar]() -> bool {
+    [this, normHuer, normLumar, normChromar, typ]() -> bool {
         GThreadLock lock; // All GUI access from idle_add callbacks or separate thread HAVE to be protected
 
         // Update mask background
@@ -2702,6 +2702,8 @@ LocallabExposure::LocallabExposure():
     exppde->add(*pdeBox, false);
 //    pdeFrame->add(*pdeBox);
 //    pack_start(*pdeFrame);
+    pack_start(*norm);
+
     pack_start(*exppde);
     ToolParamBlock* const fatBox = Gtk::manage(new ToolParamBlock());
     fatBox->pack_start(*fatamount);
@@ -2986,6 +2988,16 @@ void LocallabExposure::read(const rtengine::procparams::ProcParams* pp, const Pa
         strmaskexp->setValue(spot.strmaskexp);
         angmaskexp->setValue(spot.angmaskexp);
         Lmaskexpshape->setCurve(spot.Lmaskexpcurve);
+        
+        
+        if(spot.spotMethod == "full") {
+            norm->show();
+        } else if(spot.spotMethod == "norm") {
+            norm->hide();
+        } else if(spot.spotMethod == "exc") {
+            norm->hide();
+        }
+        
     }
 
     // Enable all listeners
@@ -2998,10 +3010,10 @@ void LocallabExposure::read(const rtengine::procparams::ProcParams* pp, const Pa
     updateExposureGUI1();
 
     // Update exposure GUI according to expMethod value
-    updateExposureGUI2();
+    updateExposureGUI2(pp);
 
     // Update exposure GUI according to inversex button state
-    updateExposureGUI3();
+    updateExposureGUI3(pp);
 
     // Note: No need to manage pedited as batch mode is deactivated for Locallab
 }
@@ -3427,6 +3439,7 @@ void LocallabExposure::convertParamToNormal()
 
     // Disable all listeners
     disableListener();
+    norm->set_active(false);
 
     // Set hidden GUI widgets in Normal mode to default spot values
     structexp->setValue((double)defSpot.structexp);
@@ -3480,6 +3493,18 @@ void LocallabExposure::convertParamToSimple()
 
 void LocallabExposure::updateGUIToMode(const modeType new_type)
 {
+     //   const LocallabParams::LocallabSpot defSpot;
+
+ /*   const rtengine::procparams::ProcParams* pp;
+    
+    const int index = pp->locallab.selspot;
+
+    if (index < (int)pp->locallab.spots.size()) {
+        const LocallabParams::LocallabSpot& spot = pp->locallab.spots.at(index);
+    
+   */ 
+    disableListener();
+    
     switch (new_type) {
         case Simple:
             // Expert and Normal mode widgets are hidden in Simple mode
@@ -3515,7 +3540,7 @@ void LocallabExposure::updateGUIToMode(const modeType new_type)
                 maskusablee->hide();
                 maskunusablee->show();
             }
-            norm->show();
+            norm->hide();
             fatlevel->hide();
             fatanchor->hide();
 
@@ -3538,7 +3563,10 @@ void LocallabExposure::updateGUIToMode(const modeType new_type)
             }
 
             blurexpde->show();
+            
             norm->show();
+            
+            
             fatlevel->show();
             fatanchor->show();
 
@@ -3563,20 +3591,30 @@ void LocallabExposure::updateGUIToMode(const modeType new_type)
             gradFramemask->show();
             decaye->show();
     }
+ //   }
+       enableListener();
+ 
 }
 
-void LocallabExposure::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer)
+void LocallabExposure::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer, int typ)
 {
     idle_register.add(
-    [this, normHuer, normLumar, normChromar]() -> bool {
+    [this, normHuer, normLumar, normChromar, typ]() -> bool {
         GThreadLock lock; // All GUI access from idle_add callbacks or separate thread HAVE to be protected
-
+        int nb = complexity->get_active_row_number();
         // Update mask background
         CCmaskexpshape->updateLocallabBackground(normChromar);
         LLmaskexpshape->updateLocallabBackground(normLumar);
         HHmaskexpshape->updateLocallabBackground(normHuer);
         shapeexpos->updateLocallabBackground(normLumar);
         Lmaskexpshape->updateLocallabBackground(normLumar);
+
+        if(typ == 2 && nb == 0) {
+            norm->show();
+        } else {
+            norm->hide();
+        }
+
         return false;
     }
     );
@@ -3585,7 +3623,7 @@ void LocallabExposure::updateMaskBackground(const double normChromar, const doub
 void LocallabExposure::expMethodChanged()
 {
     // Update exposure GUI according to expMethod value
-    updateExposureGUI2();
+   // updateExposureGUI2();
 
     if (isLocActivated && exp->getEnabled()) {
         if (listener) {
@@ -3627,7 +3665,7 @@ void LocallabExposure::inversexChanged()
     const bool maskPreviewActivated = isMaskViewActive();
 
     // Update exposure GUI according to inversex button state
-    updateExposureGUI3();
+    //updateExposureGUI3();
 
     if (maskPreviewActivated) {
         // This event is called to transmit reset mask state
@@ -3731,7 +3769,7 @@ void LocallabExposure::updateExposureGUI1()
     }
 }
 
-void LocallabExposure::updateExposureGUI2()
+void LocallabExposure::updateExposureGUI2(const rtengine::procparams::ProcParams* pp)
 {  /*
     // Update exposure GUI according to expMethod value
     if (expMethod->get_active_row_number() == 0) {
@@ -3752,7 +3790,7 @@ void LocallabExposure::updateExposureGUI2()
     */
 }
 
-void LocallabExposure::updateExposureGUI3()
+void LocallabExposure::updateExposureGUI3(const rtengine::procparams::ProcParams* pp)
 {
     const int mode = complexity->get_active_row_number();
 
@@ -3769,7 +3807,7 @@ void LocallabExposure::updateExposureGUI3()
             expMethodConn.block(false);
 
             // Update GUI accordingly
-            updateExposureGUI2();
+            updateExposureGUI2(pp);
         }
 
         softradiusexp->hide();
@@ -4714,7 +4752,7 @@ void LocallabShadow::updateGUIToMode(const modeType new_type)
     }
 }
 
-void LocallabShadow::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer)
+void LocallabShadow::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer, int typ)
 {
     idle_register.add(
     [this, normHuer, normLumar, normChromar]() -> bool {
@@ -5740,7 +5778,7 @@ void LocallabVibrance::updateGUIToMode(const modeType new_type)
     }
 }
 
-void LocallabVibrance::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer)
+void LocallabVibrance::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer, int typ)
 {
     idle_register.add(
     [this, normHuer, normLumar, normChromar]() -> bool {
@@ -8026,7 +8064,7 @@ void LocallabBlur::updateGUIToMode(const modeType new_type)
     }
 }
 
-void LocallabBlur::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer)
+void LocallabBlur::updateMaskBackground(const double normChromar, const double normLumar, const double normHuer, int typ)
 {
     idle_register.add(
     [this, normHuer, normLumar, normChromar]() -> bool {

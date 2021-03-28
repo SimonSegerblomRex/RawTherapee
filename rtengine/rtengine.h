@@ -423,6 +423,7 @@ public:
         double huer;
         double lumar;
         double chromar;
+        int typ;
     };
 
     struct locallabRetiMinMax {

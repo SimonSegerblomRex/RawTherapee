@@ -14617,6 +14617,19 @@ void ImProcFunctions::Lab_Local(
     bool execex = (lp.exposena && (lp.expcomp != 0.f || lp.blac != 0 || lp.shadex > 0 || lp.hlcomp > 0.f || lp.laplacexp > 0.1f || lp.strexp != 0.f || enablefat || lp.showmaskexpmet == 2 || lp.enaExpMask || lp.showmaskexpmet == 3 || lp.showmaskexpmet == 4  || lp.showmaskexpmet == 5 || lp.prevdE || (exlocalcurve && localexutili)));
 
     if (!lp.invex && execex) {
+        int hn = original->H;
+        int wn = original->W;
+        const std::unique_ptr<float[]> datain2(new float[wn * hn]);
+        const std::unique_ptr<float[]> dataout2(new float[wn * hn]);
+        #ifdef _OPENMP
+                            #pragma omp parallel for schedule(dynamic,16) if (multiThread)
+#endif
+        for (int y = 0; y < hn; y++) {
+            for (int x = 0; x < wn; x++) {
+                datain2[y * wn + x] = original->L[y][x];
+            }
+        }
+
         int ystart = rtengine::max(static_cast<int>(lp.yc - lp.lyT) - cy, 0);
         int yend = rtengine::min(static_cast<int>(lp.yc + lp.ly) - cy, original->H);
         int xstart = rtengine::max(static_cast<int>(lp.xc - lp.lxL) - cx, 0);
@@ -14628,11 +14641,13 @@ void ImProcFunctions::Lab_Local(
         int bfwr = bfw;
 
 
+
         if (bfw >= mSP && bfh >= mSP) {
 
             if (lp.expmet == 1  || lp.expmet == 0) {
                 optfft(N_fftwsize, bfh, bfw, bfhr, bfwr, lp, original->H, original->W, xstart, ystart, xend, yend, cx, cy);
             }
+
 
             const std::unique_ptr<LabImage> bufexporig(new LabImage(bfw, bfh));
             const std::unique_ptr<LabImage> bufexpfin(new LabImage(bfw, bfh));
@@ -14947,6 +14962,26 @@ void ImProcFunctions::Lab_Local(
                     float meansob = 0.f;
                     transit_shapedetect2(sp, 0.f, 0.f, call, 1, bufexporig.get(), bufexpfin.get(), originalmaskexp.get(), hueref, chromaref, lumaref, sobelref, meansob, blend2, lp, original, transformed, cx, cy, sk);
                 }
+                    if (params->locallab.spots.at(sp).norm && params->locallab.spots.at(sp).spotMethod == "full") {
+                
+#ifdef _OPENMP
+                    #pragma omp parallel for schedule(dynamic,16) if (multiThread)
+#endif
+                        for (int y = 0; y < hn; y++) {
+                            for (int x = 0; x < wn; x++) {
+                                dataout2[y * wn + x] = transformed->L[y][x];
+                            }
+                        }
+                        normalize_mean_dt(dataout2.get(), datain2.get(), hn * wn, 1.f, 1.f, 0.f, 0.f, 0.f, 0.f);
+#ifdef _OPENMP
+                     #pragma omp parallel for schedule(dynamic,16) if (multiThread)
+#endif
+                        for (int y = 0; y < hn; y++) {
+                            for (int x = 0; x < wn; x++) {
+                                transformed->L[y][x] = dataout2[y * wn + x];
+                            }
+                        }
+                    }
 
                 if (lp.recur) {
                     original->CopyFrom(transformed, multiThread);
@@ -14955,6 +14990,7 @@ void ImProcFunctions::Lab_Local(
                 }
             }
         }
+        
     }
 //inverse
 

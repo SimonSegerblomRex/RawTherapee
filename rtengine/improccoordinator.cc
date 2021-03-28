@@ -1077,12 +1077,16 @@ void ImProcCoordinator::updatePreviewImage(int todo, bool panningRelatedChange)
                 CurveFactory::complexCurvelocal(ecomp, black / 65535., hlcompr, hlcomprthresh, shcompr, br, cont, lumar,
                                                 hltonecurveloc, shtonecurveloc, tonecurveloc, lightCurveloc, avg,
                                                 sca);
-
+                int ty = 0;
+                if (params->locallab.spots.at(sp).spotMethod == "full") {
+                    ty = 2;
+                }
                 // Save Locallab mask curve references for current spot
                 LocallabListener::locallabRef spotref;
                 spotref.huer = huer;
                 spotref.lumar = lumar;
                 spotref.chromar = chromar;
+                spotref.typ = ty;
                 locallref.push_back(spotref);
                 // Locallab tools computation
                 /* Notes:
@@ -1195,6 +1199,7 @@ void ImProcCoordinator::updatePreviewImage(int todo, bool panningRelatedChange)
                     locallref.at(sp).chromar = chromar;
                     locallref.at(sp).lumar = lumar;
                     locallref.at(sp).huer = huer;
+                    locallref.at(sp).typ = ty;
                 }
             }
 
