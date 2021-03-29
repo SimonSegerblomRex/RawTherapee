@@ -4377,7 +4377,7 @@ void ImProcFunctions::normalize_mean_dt(float * data, const float * ref, size_t 
     #pragma omp parallel for if(multiThread)
 #endif
     for (size_t i = 0; i < size; i++) {
-        data[i] = (modma * data[i] + sigmmmodmb) + onesmod * ref[i];//normalize mean and stdv and balance PDE
+        data[i] = clipLoc((modma * data[i] + sigmmmodmb) + onesmod * ref[i]);//normalize mean and stdv and balance PDE
     }
 
 }
@@ -14963,6 +14963,8 @@ void ImProcFunctions::Lab_Local(
                     transit_shapedetect2(sp, 0.f, 0.f, call, 1, bufexporig.get(), bufexpfin.get(), originalmaskexp.get(), hueref, chromaref, lumaref, sobelref, meansob, blend2, lp, original, transformed, cx, cy, sk);
                 }
                     if (params->locallab.spots.at(sp).norm && params->locallab.spots.at(sp).spotMethod == "full") {
+                        float sin = params->locallab.spots.at(sp).fatlevel;
+                        float men = params->locallab.spots.at(sp).fatanchor;
                 
 #ifdef _OPENMP
                     #pragma omp parallel for schedule(dynamic,16) if (multiThread)
@@ -14972,7 +14974,7 @@ void ImProcFunctions::Lab_Local(
                                 dataout2[y * wn + x] = transformed->L[y][x];
                             }
                         }
-                        normalize_mean_dt(dataout2.get(), datain2.get(), hn * wn, 1.f, 1.f, 0.f, 0.f, 0.f, 0.f);
+                        normalize_mean_dt(dataout2.get(), datain2.get(), hn * wn, men, sin, 0.f, 0.f, 0.f, 0.f);
 #ifdef _OPENMP
                      #pragma omp parallel for schedule(dynamic,16) if (multiThread)
 #endif

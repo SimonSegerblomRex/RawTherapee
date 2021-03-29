@@ -3,7 +3,6 @@
  *  This file is part of RawTherapee.
  *
  *  Copyright (c) 2004-2010 Gabor Horvath <hgabor@rawtherapee.com>frame
-fft *
  *  RawTherapee is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -2486,8 +2485,8 @@ LocallabExposure::LocallabExposure():
     fatamount(Gtk::manage(new Adjuster(M("TP_LOCALLAB_FATAMOUNT"), 1., 100., 1., 1.))),
     fatdetail(Gtk::manage(new Adjuster(M("TP_LOCALLAB_FATDETAIL"), -100., 300., 1., 0.))),
     norm(Gtk::manage(new Gtk::CheckButton(M("TP_LOCALLAB_EQUIL")))),
-    fatlevel(Gtk::manage(new Adjuster(M("TP_LOCALLAB_FATLEVEL"), 0.5, 2.0, 0.01, 1.))),
-    fatanchor(Gtk::manage(new Adjuster(M("TP_LOCALLAB_FATANCHORA"), 0.5, 2.0, 0.01, 1.))),
+    fatlevel(Gtk::manage(new Adjuster(M("TP_LOCALLAB_FATLEVEL"), 0.7, 1.3, 0.01, 1.))),
+    fatanchor(Gtk::manage(new Adjuster(M("TP_LOCALLAB_FATANCHORA"), 0.7, 1.3, 0.01, 1.))),
     sensiex(Gtk::manage(new Adjuster(M("TP_LOCALLAB_SENSI"), 0, 100, 1, 60))),
     structexp(Gtk::manage(new Adjuster(M("TP_LOCALLAB_STRUCCOL"), 0, 100, 1, 0))),
     blurexpde(Gtk::manage(new Adjuster(M("TP_LOCALLAB_BLURDE"), 2, 100, 1, 5))),
@@ -2703,6 +2702,8 @@ LocallabExposure::LocallabExposure():
 //    pdeFrame->add(*pdeBox);
 //    pack_start(*pdeFrame);
     pack_start(*norm);
+    pack_start(*fatlevel);
+    pack_start(*fatanchor);
 
     pack_start(*exppde);
     ToolParamBlock* const fatBox = Gtk::manage(new ToolParamBlock());
@@ -2992,10 +2993,16 @@ void LocallabExposure::read(const rtengine::procparams::ProcParams* pp, const Pa
         
         if(spot.spotMethod == "full") {
             norm->show();
+            fatlevel->show();
+            fatanchor->show();
         } else if(spot.spotMethod == "norm") {
             norm->hide();
+            fatlevel->hide();
+            fatanchor->hide();
         } else if(spot.spotMethod == "exc") {
             norm->hide();
+            fatlevel->hide();
+            fatanchor->hide();
         }
         
     }
@@ -3611,8 +3618,12 @@ void LocallabExposure::updateMaskBackground(const double normChromar, const doub
 
         if(typ == 2 && nb == 0) {
             norm->show();
+            fatlevel->show();
+            fatanchor->show();
         } else {
             norm->hide();
+            fatlevel->hide();
+            fatanchor->hide();
         }
 
         return false;
