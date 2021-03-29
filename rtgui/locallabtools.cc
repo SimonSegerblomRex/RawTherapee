@@ -2480,7 +2480,7 @@ LocallabExposure::LocallabExposure():
     gamm(Gtk::manage(new Adjuster(M("TP_LOCALLAB_GAMM"), 0.2, 1.3, 0.01, 0.4))),
     labelexpmethod(Gtk::manage(new Gtk::Label(M("TP_LOCALLAB_NOISEMETH") + ":"))),
     exnoiseMethod(Gtk::manage(new MyComboBoxText())),
-//    fatFrame(Gtk::manage(new Gtk::Frame(M("TP_LOCALLAB_FATFRA")))),
+    fatFrame(Gtk::manage(new Gtk::Frame(M("TP_LOCALLAB_FATFRA")))),
     expfat(Gtk::manage(new MyExpander(false, M("TP_LOCALLAB_FATFRA")))),
     fatamount(Gtk::manage(new Adjuster(M("TP_LOCALLAB_FATAMOUNT"), 1., 100., 1., 1.))),
     fatdetail(Gtk::manage(new Adjuster(M("TP_LOCALLAB_FATDETAIL"), -100., 300., 1., 0.))),
@@ -2561,7 +2561,7 @@ LocallabExposure::LocallabExposure():
     exnoiseMethod->set_active(0);
     exnoiseMethodConn  = exnoiseMethod->signal_changed().connect(sigc::mem_fun(*this, &LocallabExposure::exnoiseMethodChanged));
 
- //   fatFrame->set_label_align(0.025, 0.5);
+    fatFrame->set_label_align(0.025, 0.5);
 
     fatamount->setAdjusterListener(this);
 
@@ -2701,9 +2701,13 @@ LocallabExposure::LocallabExposure():
     exppde->add(*pdeBox, false);
 //    pdeFrame->add(*pdeBox);
 //    pack_start(*pdeFrame);
-    pack_start(*norm);
-    pack_start(*fatlevel);
-    pack_start(*fatanchor);
+    fatFrame->set_label_widget(*norm);
+    ToolParamBlock* const norBox = Gtk::manage(new ToolParamBlock());
+//    norBox->pack_start(*norm);
+    norBox->pack_start(*fatlevel);
+    norBox->pack_start(*fatanchor);
+    fatFrame->add(*norBox);
+    pack_start(*fatFrame);
 
     pack_start(*exppde);
     ToolParamBlock* const fatBox = Gtk::manage(new ToolParamBlock());
@@ -2995,14 +2999,17 @@ void LocallabExposure::read(const rtengine::procparams::ProcParams* pp, const Pa
             norm->show();
             fatlevel->show();
             fatanchor->show();
+            fatFrame->show();
         } else if(spot.spotMethod == "norm") {
             norm->hide();
             fatlevel->hide();
             fatanchor->hide();
+            fatFrame->hide();
         } else if(spot.spotMethod == "exc") {
             norm->hide();
             fatlevel->hide();
             fatanchor->hide();
+            fatFrame->hide();
         }
         
     }
@@ -3527,6 +3534,7 @@ void LocallabExposure::updateGUIToMode(const modeType new_type)
             norm->hide();
             fatlevel->hide();
             fatanchor->hide();
+            fatFrame->hide();
 
             break;
 
@@ -3550,6 +3558,7 @@ void LocallabExposure::updateGUIToMode(const modeType new_type)
             norm->hide();
             fatlevel->hide();
             fatanchor->hide();
+            fatFrame->hide();
 
             // Specific Simple mode widgets are shown in Normal mode
             if (!inversex->get_active()) { // Keep widget hidden when invers is toggled
@@ -3576,6 +3585,7 @@ void LocallabExposure::updateGUIToMode(const modeType new_type)
             
             fatlevel->show();
             fatanchor->show();
+            fatFrame->show();
 
             if (!inversex->get_active()) { // Keep widget hidden when invers is toggled
                 expgradexp->show();
