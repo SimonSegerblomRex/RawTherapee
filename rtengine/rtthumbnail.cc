@@ -223,13 +223,14 @@ void scale_colors (rtengine::RawImage *ri, float scale_mul[4], float cblack[4], 
             }
         }
     } else if (isFloat) {
+        const auto colors = ri->get_colors();
 #ifdef _OPENMP
         #pragma omp parallel for if(multiThread)
 #endif
         for (int row = 0; row < height; ++row) {
             for (int col = 0; col < width; ++col) {
-                for (int i = 0; i < ri->get_colors(); ++i) {
-                    float val = float_raw_image[(row + top_margin) * raw_width + col + left_margin + i];
+                for (int i = 0; i < colors; ++i) {
+                    float val = float_raw_image[colors * ((row + top_margin) * raw_width + col + left_margin) + i];
                     val -= cblack[i];
                     val *= scale_mul[i];
                     image[row * width + col][i] = val;
